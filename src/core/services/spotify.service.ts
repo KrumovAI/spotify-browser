@@ -1,44 +1,33 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class SpotifyService {
-  constructor(private httpClient: HttpClient) {
+  private baseUrl: string = 'https://api.spotify.com/v1/'
+  private options: any = null
 
+  constructor(
+    private authService: AuthService,
+    private httpClient: HttpClient,
+  ) {
+    this.authService
+      .tokenUpdated$
+      .subscribe(token => {
+        this.options = {
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json',
+          }
+        }
+      })
   }
 
-  getToken() {
-    const options = {
-      headers: {
-        'Authorization': 'Basic ' + btoa(environment.spotify.clientId + ':' + environment.spotify.clientSecret),
-        'Content-Type': 'application/x-www-form-urlencoded',
-      }
-    }
-
-    const body = 'grant_type=client_credentials'
-
-    return this.httpClient.post('https://accounts.spotify.com/api/token', body, options)
+  getGenres() {
+    return this.httpClient.get(`${this.baseUrl}recommendations/available-genre-seeds`, this.options)
   }
 
-  getGenres(token) {
-    const options = {
-      headers: {
-        'Authorization': 'Bearer ' + token,
-        'Content-Type': 'application/json',
-      }
-    }
-
-    return this.httpClient.get('https://api.spotify.com/v1/recommendations/available-genre-seeds', options)
-  }
-
-  search(term: string, genres: string[], token: string) {    
-    const options = {
-      headers: {
-        'Authorization': 'Bearer ' + token,
-        'Content-Type': 'application/json',
-      }
-    }
+  search(term: string, genres: string[]) {
 
     let q = term
     let types: string[] = [
@@ -52,6 +41,6 @@ export class SpotifyService {
       q = `${q} genre:${genres.join(',')}`
     }    
 
-    return this.httpClient.get(`https://api.spotify.com/v1/search?type=${types.join(',')}&q=${q}`, options)
+    return this.httpClient.get(`${this.baseUrl}search?type=${types.join(',')}&q=${q}`, this.options)
   }
 }

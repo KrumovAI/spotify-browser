@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 
-import { SpotifyService } from './services/spotify.service';
+import { AuthService, SpotifyService } from './services';
 import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
@@ -9,6 +9,6 @@ import { HttpClientModule } from '@angular/common/http';
   imports: [
     HttpClientModule,
   ],
-  providers: [SpotifyService],
+  providers: [AuthService, SpotifyService],
 })
 export class CoreModule { }

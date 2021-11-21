@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { SpotifyService } from 'src/core/services/spotify.service';
-// import 'rxjs/add/operator/first';
-// import 'rxjs/add/operator/first';
+import { AuthService, SpotifyService } from 'src/core/services';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -17,18 +16,24 @@ export class AppComponent {
 
   searchTerm: string = ''
 
-  constructor(private spotifyService: SpotifyService) {
-
+  constructor(
+    private authService: AuthService,
+    private spotifyService: SpotifyService,
+  ) {
+    this.authService.updateToken()
   }
 
   ngOnInit() {
-    this.spotifyService.getToken()
-      // .first()
-      .subscribe((token: any) => {
-        console.log(token)
-        this.token = token.access_token
-
-        this.spotifyService.getGenres(token.access_token)
+    this.authService.tokenUpdated$
+      .pipe(
+        take(1),
+      )
+      .subscribe(_ => {
+        this.spotifyService
+          .getGenres()
+          .pipe(
+            take(1),
+          )
           .subscribe((data: any) => {
             this.genres = data.genres.map(g => ({
               name: g,
@@ -42,8 +47,11 @@ export class AppComponent {
   }
 
   search() {
-    this.spotifyService.search(this.searchTerm, this.genres.filter(g => g.checked).map(g => g.name), this.token)
-      // .first()
+    this.spotifyService
+      .search(this.searchTerm, this.genres.filter(g => g.checked).map(g => g.name))
+      .pipe(
+        take(1),
+      )
       .subscribe((data: any) => {
         // TO-DO: map data
         console.log(data)
