@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService, SpotifyService } from 'src/core/services';
 import { take } from 'rxjs/operators';
+import { Artist, Album, Track, SearchResults } from 'src/core/models';
 
 @Component({
   selector: 'app-root',
@@ -10,11 +11,11 @@ import { take } from 'rxjs/operators';
 export class AppComponent {
   title = 'spotify-browser';
 
+  searchTerm: string = ''
   genres: any[] = []
 
-  token: string = ''
+  searchResults: SearchResults = null
 
-  searchTerm: string = ''
 
   constructor(
     private authService: AuthService,
@@ -39,10 +40,7 @@ export class AppComponent {
               name: g,
               checked: false
             }))
-            console.log('Genres: ', this.genres)
           })
-      }, err => {
-        console.log(err)
       })
   }
 
@@ -52,9 +50,10 @@ export class AppComponent {
       .pipe(
         take(1),
       )
-      .subscribe((data: any) => {
-        // TO-DO: map data
-        console.log(data)
+      .subscribe((response: any) => {
+        this.searchResults = new SearchResults(response)
+
+        console.log(this.searchResults)
       })
   }
 }

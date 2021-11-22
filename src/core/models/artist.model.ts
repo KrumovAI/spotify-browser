@@ -10,4 +10,16 @@ export class Artist {
   popularity: number
   genres: string[] = []
   images: Image[] = []
+
+  constructor(artistResponseObject: any) {
+    this.id = artistResponseObject.id
+    this.name = artistResponseObject.name
+    this.uri = artistResponseObject.uri
+    this.href = artistResponseObject.href
+    this.listenUrl = artistResponseObject.external_urls?.spotify
+    this.followers = artistResponseObject.followers
+    this.popularity = artistResponseObject.popularity
+    this.genres = artistResponseObject.genres
+    this.images = artistResponseObject.images
+  }
 }
