@@ -1,16 +1,40 @@
 <div class="content" role="main">
   <router-outlet></router-outlet>
 
-  <form class="example-form">
-    <mat-form-field class="example-full-width" appearance="fill">
-      <!-- <mat-label>Search</mat-label> -->
-      <input matInput name="searchTerm" type="search" placeholder="Search" [(ngModel)]="searchTerm">
-      <button mat-raised-button (click)="search()" color="primary">Search</button>
-    </mat-form-field>
-  </form>
-
-  <div *ngFor="let genre of genres">
-    <mat-checkbox [(ngModel)]="genre.checked">{{ genre.name }}</mat-checkbox>
+  <div class="wrapper">
+    <div class="search">
+      <form class="example-form">
+        <mat-form-field class="search-bar" appearance="fill">
+          <!-- <mat-label>Search</mat-label> -->
+          <input matInput name="searchTerm" type="search" placeholder="Search" [(ngModel)]="searchTerm">
+          <button matSuffix mat-button (click)="search()"><mat-icon >search</mat-icon></button>
+          <!-- <button mat-raised-button  color="primary">Search</button> -->
+        </mat-form-field>
+      </form>
+    </div>
+  
+    <div class="d-flex flex-row">
+      <div class="genres">
+        <div *ngFor="let genre of genres">
+          <mat-checkbox [(ngModel)]="genre.checked">{{ genre.name }}</mat-checkbox>
+        </div>
+      </div>
+    
+      <div *ngIf="searchResults; else noSearch">
+        <div *ngIf="searchResults.artists">
+          <h3>Artists</h3>
+    
+          <div class="search-results">
+            <mat-card *ngFor="let artist of searchResults.artists">
+              <mat-card-title>{{ artist.name }}</mat-card-title>
+              <img mat-card-image [attr.src]="artist.images[0].url" [attr.alt]="artist.name" />
+            </mat-card>
+          </div>
+        </div>
+      </div>
+      <ng-template #noSearch>
+        Search to browse Spotify library.
+      </ng-template>
+    </div>
   </div>
-
 </div>

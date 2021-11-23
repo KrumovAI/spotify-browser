@@ -9,6 +9,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+
 import { FormsModule } from '@angular/forms';
 
 @NgModule({
@@ -25,6 +28,8 @@ import { FormsModule } from '@angular/forms';
     MatCheckboxModule,
     MatInputModule,
     MatButtonModule,
+    MatCardModule,
+    MatIconModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

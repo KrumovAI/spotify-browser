@@ -1,0 +1,21 @@
+.search-bar {
+  width: 100%;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.search-results {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+
+  .mat-card {
+    width: 25%;
+  }
+}
