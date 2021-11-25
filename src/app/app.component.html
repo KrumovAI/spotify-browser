@@ -1,6 +1,15 @@
 <div class="content" role="main">
   <router-outlet></router-outlet>
 
+  <div class="header" role="banner">
+    <img
+      class="logo"
+      alt="Spotify Logo"
+      src="../assets/images/spotify-logo.png"
+    />
+    <span>Spotify Browser</span>
+  </div>
+
   <div class="wrapper">
     <div class="search">
       <form class="example-form">
@@ -16,25 +25,51 @@
     <div class="d-flex flex-row">
       <div class="genres">
         <div *ngFor="let genre of genres">
-          <mat-checkbox [(ngModel)]="genre.checked">{{ genre.name }}</mat-checkbox>
+          <mat-checkbox [(ngModel)]="genre.checked" color="primary">{{ genre.name }}</mat-checkbox>
         </div>
       </div>
     
-      <div *ngIf="searchResults; else noSearch">
-        <div *ngIf="searchResults.artists">
-          <h3>Artists</h3>
-    
-          <div class="search-results">
-            <mat-card *ngFor="let artist of searchResults.artists">
-              <mat-card-title>{{ artist.name }}</mat-card-title>
-              <img mat-card-image [attr.src]="artist.images[0].url" [attr.alt]="artist.name" />
-            </mat-card>
+      <div class="search-results">
+        <div *ngIf="searchResults; else noSearch">
+          <div *ngIf="searchResults.artists">
+            <h1>Artists</h1>
+      
+            <div class="search-results-group">
+              <mat-card *ngFor="let artist of searchResults.artists">
+                <img mat-card-image [attr.src]="artist.images[0].url" [attr.alt]="artist.name" />
+                <mat-card-title>{{ artist.name }}</mat-card-title>
+              </mat-card>
+            </div>
+          </div>
+
+          <div *ngIf="searchResults.tracks">
+            <h1>Tracks</h1>
+      
+            <div class="search-results-group">
+              <mat-card *ngFor="let track of searchResults.tracks">
+                <img mat-card-image [attr.src]="track.album.images[0].url" [attr.alt]="track.name" />
+                <mat-card-title>{{ track.name }}</mat-card-title>
+              </mat-card>
+            </div>
+          </div>
+
+          <div *ngIf="searchResults.albums">
+            <h1>Albums</h1>
+      
+            <div class="search-results-group">
+              <mat-card *ngFor="let album of searchResults.albums">
+                <img mat-card-image [attr.src]="album.images[0].url" [attr.alt]="album.name" />
+                <mat-card-title>{{ album.name }}</mat-card-title>
+              </mat-card>
+            </div>
           </div>
         </div>
+
+        <ng-template #noSearch>
+          <h1 class="text-center">No Results!</h1>
+          <h3 class="text-center">Search to browse Spotify library.</h3>
+        </ng-template>
       </div>
-      <ng-template #noSearch>
-        Search to browse Spotify library.
-      </ng-template>
     </div>
   </div>
 </div>
