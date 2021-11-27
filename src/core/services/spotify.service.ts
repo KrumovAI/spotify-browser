@@ -41,6 +41,6 @@ export class SpotifyService {
       q = `${q} genre:${genres.join(',')}`
     }    
 
-    return this.httpClient.get(`${this.baseUrl}search?type=${types.join(',')}&q=${q}`, this.options)
+    return this.httpClient.get(`${this.baseUrl}search?type=${types.join(',')}&q=${q}&limit=12`, this.options)
   }
 }

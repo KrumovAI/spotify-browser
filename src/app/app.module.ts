@@ -15,7 +15,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { ResultCardComponent } from 'src/components/result-card/result-card.component';
 import { HeaderComponent } from 'src/components/header/header.component';
-import { SearchResultsGroupComponent } from 'src/components/search-results-group/search-results-group.component';
 import { SearchBarComponent } from 'src/components/search-bar/search-bar.component';
 import { InfoParagraphComponent } from 'src/components/info-paragraph/info-paragraph.component';
 
@@ -26,7 +25,6 @@ import { InfoParagraphComponent } from 'src/components/info-paragraph/info-parag
     InfoParagraphComponent,
     ResultCardComponent,
     SearchBarComponent,
-    SearchResultsGroupComponent,
   ],
   imports: [
     BrowserModule,

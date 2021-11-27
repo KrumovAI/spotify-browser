@@ -14,25 +14,7 @@
       </div>
     
       <div class="search-results">
-        <div *ngIf="searchResults; else noSearch">
-          <!--<search-results-group *ngIf="searchResults.artists.length > 0" title="Artists">
-            <result-card *ngFor="let artist of searchResults.artists" [title]="artist.name" [imgSrc]="artist.images[0]?.url" [expandedView]="expandedViews.artists">
-
-            </result-card>
-          </search-results-group>
-
-          <search-results-group *ngIf="searchResults.tracks.length > 0" title="Tracks">
-            <result-card *ngFor="let track of searchResults.tracks" [title]="track.name" [imgSrc]="track.album.images[0]?.url" [expandedView]="expandedViews.tracks">
-
-            </result-card>
-          </search-results-group>
-          
-          <search-results-group *ngIf="searchResults.albums.length > 0" title="Albums">
-            <result-card *ngFor="let album of searchResults.albums" [title]="album.name" [imgSrc]="album.images[0]?.url" [expandedView]="expandedViews.albums">
-
-            </result-card>
-          </search-results-group> -->
-          
+        <div *ngIf="searchResults && searchResults.hasAny; else noSearch">
           <div *ngIf="searchResults.artists.length > 0">
             <div class="search-results-header">
               <h1>Artists</h1>
@@ -102,13 +84,6 @@
               </result-card>
             </div>
           </div>
-          <!-- <div *ngIf="searchResults.albums.length > 0">
-            <h1>Albums</h1>
-      
-            <div class="search-results-group-content">
-              <result-card *ngFor="let album of searchResults.albums" [title]="album.name" [imgSrc]="album.images[0]?.url" [expandedView]="expandedViews.albums"></result-card>
-            </div>
-          </div> -->
         </div>
 
         <ng-template #noSearch>

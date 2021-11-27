@@ -21,8 +21,6 @@ export class AuthService {
         take(1),
       )
       .subscribe((res: any) => {
-        console.log(res)
-
         this.token = res.access_token
         this.tokenUpdated$.next(this.token)
 

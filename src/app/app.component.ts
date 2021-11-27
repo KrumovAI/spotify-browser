@@ -40,7 +40,6 @@ export class AppComponent {
   }
 
   toggleView(viewKey: string) {
-    console.log('wtf')
     this.expandedViews[viewKey] = !this.expandedViews[viewKey]
   }
 
@@ -66,8 +65,6 @@ export class AppComponent {
       )
       .subscribe((response: any) => {
         this.searchResults = new SearchResults(response)
-
-        console.log(this.searchResults)
       })
   }
 }
