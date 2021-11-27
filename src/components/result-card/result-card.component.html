@@ -1,0 +1,14 @@
+<mat-card *ngIf="!expandedView" class="grid-view">
+  <img mat-card-image [attr.src]="imgUrl" [attr.alt]="title" />
+  <mat-card-title>{{ title }}</mat-card-title>
+</mat-card>
+
+<mat-card *ngIf="expandedView" class="expanded-view">
+  <img mat-card-image [attr.src]="imgUrl" [attr.alt]="title" />
+
+  <mat-card-content>
+    <mat-card-title>{{ title }}</mat-card-title>
+
+    <ng-content></ng-content>
+  </mat-card-content>
+</mat-card>

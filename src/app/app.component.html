@@ -1,26 +1,10 @@
 <div class="content" role="main">
   <router-outlet></router-outlet>
 
-  <div class="header" role="banner">
-    <img
-      class="logo"
-      alt="Spotify Logo"
-      src="../assets/images/spotify-logo.png"
-    />
-    <span>Spotify Browser</span>
-  </div>
+  <app-header></app-header>
 
   <div class="wrapper">
-    <div class="search">
-      <form class="example-form">
-        <mat-form-field class="search-bar" appearance="fill">
-          <!-- <mat-label>Search</mat-label> -->
-          <input matInput name="searchTerm" type="search" placeholder="Search" [(ngModel)]="searchTerm">
-          <button matSuffix mat-button (click)="search()"><mat-icon >search</mat-icon></button>
-          <!-- <button mat-raised-button  color="primary">Search</button> -->
-        </mat-form-field>
-      </form>
-    </div>
+    <search-bar (onSearch)="search($event)"></search-bar>    
   
     <div class="d-flex flex-row">
       <div class="genres">
@@ -31,38 +15,100 @@
     
       <div class="search-results">
         <div *ngIf="searchResults; else noSearch">
-          <div *ngIf="searchResults.artists">
-            <h1>Artists</h1>
+          <!--<search-results-group *ngIf="searchResults.artists.length > 0" title="Artists">
+            <result-card *ngFor="let artist of searchResults.artists" [title]="artist.name" [imgSrc]="artist.images[0]?.url" [expandedView]="expandedViews.artists">
+
+            </result-card>
+          </search-results-group>
+
+          <search-results-group *ngIf="searchResults.tracks.length > 0" title="Tracks">
+            <result-card *ngFor="let track of searchResults.tracks" [title]="track.name" [imgSrc]="track.album.images[0]?.url" [expandedView]="expandedViews.tracks">
+
+            </result-card>
+          </search-results-group>
+          
+          <search-results-group *ngIf="searchResults.albums.length > 0" title="Albums">
+            <result-card *ngFor="let album of searchResults.albums" [title]="album.name" [imgSrc]="album.images[0]?.url" [expandedView]="expandedViews.albums">
+
+            </result-card>
+          </search-results-group> -->
+          
+          <div *ngIf="searchResults.artists.length > 0">
+            <div class="search-results-header">
+              <h1>Artists</h1>
+              <button mat-button (click)="toggleView('artists')"><mat-icon>{{ expandedViews.artists ? 'view_module' : 'view_stream' }}</mat-icon></button>
+            </div>
       
-            <div class="search-results-group">
-              <mat-card *ngFor="let artist of searchResults.artists">
-                <img mat-card-image [attr.src]="artist.images[0].url" [attr.alt]="artist.name" />
-                <mat-card-title>{{ artist.name }}</mat-card-title>
-              </mat-card>
+            <div class="search-results-group-content" [ngClass]="{ 'flex-row': !expandedViews.artists, 'flex-column': expandedViews.artists }">
+              <result-card *ngFor="let artist of searchResults.artists" [title]="artist.name" [imgSrc]="artist.images[0]?.url" [expandedView]="expandedViews.artists">
+                <div class="d-flex flex-column justify-content-between" style="height: 85%;">
+                  <div>
+                    <info-paragraph key="Followers" [value]="artist.followers"></info-paragraph>
+
+                    <a [attr.href]="artist.listenUrl" target="__blank">Listen Online</a>
+                  </div>
+
+                  <div class="d-block" style="margin-left: -0.25rem;">
+                    <span class="genre-label" *ngFor="let genre of artist.genres">{{ genre }}</span>
+                  </div>
+                </div>
+              </result-card>
             </div>
           </div>
 
-          <div *ngIf="searchResults.tracks">
-            <h1>Tracks</h1>
+          <div *ngIf="searchResults.tracks.length > 0">
+            <div class="search-results-header">
+              <h1>Tracks</h1>
+              <button mat-button (click)="toggleView('tracks')"><mat-icon>{{ expandedViews.tracks ? 'view_module' : 'view_stream' }}</mat-icon></button>
+            </div>
       
-            <div class="search-results-group">
-              <mat-card *ngFor="let track of searchResults.tracks">
-                <img mat-card-image [attr.src]="track.album.images[0].url" [attr.alt]="track.name" />
-                <mat-card-title>{{ track.name }}</mat-card-title>
-              </mat-card>
+            <div class="search-results-group-content" [ngClass]="{ 'flex-row': !expandedViews.tracks, 'flex-column': expandedViews.tracks }">
+              <result-card *ngFor="let track of searchResults.tracks" [title]="track.name" [imgSrc]="track.album.images[0]?.url" [expandedView]="expandedViews.tracks">
+                <div class="d-flex flex-column justify-content-between" style="height: 85%;">
+                  <div>
+                    <info-paragraph key="Artists" [value]="track.artistsString"></info-paragraph>
+                    <info-paragraph key="Album" [value]="track.album.name"></info-paragraph>
+                    <info-paragraph key="Track Number" [value]="track.trackNumber"></info-paragraph>
+                    <info-paragraph key="Duration" [value]="track.duration | date:'mm:ss'"></info-paragraph>
+                  </div>
+
+                  <div class="d-block">
+                    <a [attr.href]="track.listenUrl" target="__blank">Listen Online</a>
+                  </div>
+                </div>
+              </result-card>
             </div>
           </div>
 
-          <div *ngIf="searchResults.albums">
+          <div *ngIf="searchResults.albums.length > 0">
+            <div class="search-results-header">
+              <h1>Albums</h1>
+              <button mat-button (click)="toggleView('albums')"><mat-icon>{{ expandedViews.albums ? 'view_module' : 'view_stream' }}</mat-icon></button>
+            </div>
+      
+            <div class="search-results-group-content" [ngClass]="{ 'flex-row': !expandedViews.albums, 'flex-column': expandedViews.albums }">
+              <result-card *ngFor="let album of searchResults.albums" [title]="album.name" [imgSrc]="album.images[0]?.url" [expandedView]="expandedViews.albums">
+                <div class="d-flex flex-column justify-content-between" style="height: 85%;">
+                  <div>
+                    <info-paragraph key="Artists" [value]="album.artistsString"></info-paragraph>
+                    <info-paragraph key="Release Year" [value]="album.releaseDate | date:'YYYY'"></info-paragraph>
+                    <info-paragraph key="Tracks" [value]="album.totalTracks"></info-paragraph>
+                  </div>
+
+                  <div class="d-block">
+                    <a [attr.href]="album.listenUrl" target="__blank">Listen Online</a>
+                  </div>
+                </div>
+              </result-card>
+            </div>
+          </div>
+          <!-- <div *ngIf="searchResults.albums.length > 0">
             <h1>Albums</h1>
       
-            <div class="search-results-group">
-              <mat-card *ngFor="let album of searchResults.albums">
-                <img mat-card-image [attr.src]="album.images[0].url" [attr.alt]="album.name" />
-                <mat-card-title>{{ album.name }}</mat-card-title>
-              </mat-card>
+            <div class="search-results-group-content">
+              <result-card *ngFor="let album of searchResults.albums" [title]="album.name" [imgSrc]="album.images[0]?.url" [expandedView]="expandedViews.albums"></result-card>
             </div>
-          </div>
+          </div> -->
         </div>
 
         <ng-template #noSearch>

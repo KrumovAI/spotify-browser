@@ -9,13 +9,16 @@ import { Artist, Album, Track, SearchResults } from 'src/core/models';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'spotify-browser';
-
-  searchTerm: string = ''
+  title = 'spotify-browser'
+  
   genres: any[] = []
-
   searchResults: SearchResults = null
 
+  expandedViews = {
+    artists: false,
+    albums: false,
+    tracks: false,
+  }
 
   constructor(
     private authService: AuthService,
@@ -30,23 +33,34 @@ export class AppComponent {
         take(1),
       )
       .subscribe(_ => {
-        this.spotifyService
-          .getGenres()
-          .pipe(
-            take(1),
-          )
-          .subscribe((data: any) => {
-            this.genres = data.genres.map(g => ({
-              name: g,
-              checked: false
-            }))
-          })
+        if (this.genres.length === 0) {
+          this.getGenres()
+        }
       })
   }
 
-  search() {
+  toggleView(viewKey: string) {
+    console.log('wtf')
+    this.expandedViews[viewKey] = !this.expandedViews[viewKey]
+  }
+
+  getGenres() {    
     this.spotifyService
-      .search(this.searchTerm, this.genres.filter(g => g.checked).map(g => g.name))
+      .getGenres()
+      .pipe(
+        take(1),
+      )
+      .subscribe((data: any) => {
+        this.genres = data.genres.map(g => ({
+          name: g,
+          checked: false
+        }))
+      })
+  }
+
+  search(searchTerm: string) {
+    this.spotifyService
+      .search(searchTerm, this.genres.filter(g => g.checked).map(g => g.name))
       .pipe(
         take(1),
       )

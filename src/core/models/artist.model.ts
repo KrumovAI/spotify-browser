@@ -1,4 +1,4 @@
-import { Image } from './image.model'
+import { Image } from './image.model';
 
 export class Artist {
   id: string
@@ -17,7 +17,7 @@ export class Artist {
     this.uri = artistResponseObject.uri
     this.href = artistResponseObject.href
     this.listenUrl = artistResponseObject.external_urls?.spotify
-    this.followers = artistResponseObject.followers
+    this.followers = artistResponseObject.followers?.total || 0
     this.popularity = artistResponseObject.popularity
     this.genres = artistResponseObject.genres
     this.images = artistResponseObject.images
